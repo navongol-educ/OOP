@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Delegate
 {
-    internal class Program
+    internal class Learn
     {
         // Contract definition 01
         // params and ret value

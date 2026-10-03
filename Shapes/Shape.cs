@@ -32,6 +32,7 @@ namespace Shapes
         //private ConsoleColor _color;
         //protected ConsoleColor Color { get { return _color; } set { _color = value; } }
 
+
         //Constructors
         public Shape() : this(ShapeColor.Red){ }
         public Shape(ShapeColor color = ShapeColor.Red)
