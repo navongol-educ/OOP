@@ -16,8 +16,13 @@ namespace Delegate
         // סעיף 2: פונקציה רגילה (static) שמתאימה בדיוק לחוזה של ה-Delegate
         public static bool IsExcellent(Student student)
         {
-            return student.Name == "אבי";
+            return student.Grade >= 90;
         }
+
+        //public static bool IsExcellent(Student student)
+        //{
+        //    return student.Name == "Avi";
+        //}
 
         static void Main(string[] args)
         {
@@ -28,41 +33,39 @@ namespace Delegate
 
             //// חלק א
             //// יצירת אובייקט בדיקה של תלמיד
-            Student testStudent = new Student { Name = "אבי", StudentClass = "יב1" };
+            Student testStudent = new Student { Name = "Avi", StudentClass = "G12-1", Grade = 95 };
 
             //// סעיף 3: יצירת משתנה מהטיפוס של ה-Delegate ושיוך הפונקציה אליו
             ClassFilter myFilter = IsExcellent;
 
             //// הפעלת ה-Delegate (מפעיל בעקיפין את הפונקציה IsExcellent)
-            bool isAvi = myFilter(testStudent);
-            Console.WriteLine($"Is the student Avi? {isAvi}"); // יודפס: True
+            bool isExcellent = myFilter(testStudent);
+            Console.WriteLine($"Is the student Excellent? {isExcellent}"); // יודפס: True
 
 
             // חלק ב 
             // סעיף 1: פעולה אנונימית (C# 2.0) - מגדירים את גוף הפונקציה "במקום" בלי שם
             myFilter = delegate (Student s)
             {
-                return s.StudentClass == "יב1";
+                return s.StudentClass == "G12-1";
             };
 
             isTrue = myFilter(testStudent);
-            Console.WriteLine($"(Anonymous Function with delegate: Is the student Class יב1? {isTrue}"); // יודפס: True
-
+            Console.WriteLine($"(Anonymous Function with delegate: Is the student Class G12-1? {isTrue}"); // יודפס: True
 
             // סעיף 2: ביטוי למבדה מלא - מחליפים את המילה delegate בסימן החץ (=>)
-            myFilter = (Student s) => { return s.StudentClass == "יב1"; };
+            myFilter = (Student s) => { return s.StudentClass == "G12-1"; };
 
             // הפעלת ה-Delegate (מפעיל בעקיפין את הפונקציה האנונימית)
             isTrue = myFilter(testStudent);
-            Console.WriteLine($"Full Lambda Syntax: Is the student Class יב1? {isTrue}"); // יודפס: True
+            Console.WriteLine($"Full Lambda Syntax: Is the student Class G12-1? {isTrue}"); // יודפס: True
 
             // סעיף 3: קיצורי תחביר (Syntax Sugar) - הגרסה הקצרה והמקצועית ביותר!
             // בגלל שיש רק פרמטר אחד, גוף קצר של שורה אחת והסקה אוטומטית של הטיפוס:
-            myFilter = s => s.StudentClass == "יב1";
-
+            myFilter = s => s.StudentClass == "G12-1";
             // הפעלת ה-Delegate (מפעיל בעקיפין את הפונקציה האנונימית)
             isTrue = myFilter(testStudent);
-            Console.WriteLine($"Syntax Sugar: Is the student Class יב1? {isTrue}"); // יודפס: True
+            Console.WriteLine($"Syntax Sugar: Is the student Class G12-1? {isTrue}"); // יודפס: True
 
 
             // חלק ג
@@ -71,10 +74,10 @@ namespace Delegate
             // סעיף 1: שימוש ב-Func גנרי (מקבל Student, מחזיר string)
             // הפרמטר האחרון בהגדרת ה-Func הוא תמיד סוג הערך המוחזר
             Func<Student, string> getUpperName = s => s.Name.ToUpper();
-            Console.WriteLine(getUpperName(testStudent)); // יודפס: אבי (באותיות גדולות אם היה באנגלית)
+            Console.WriteLine(getUpperName(testStudent)); // יודפס:  (באותיות גדולות אם היה באנגלית)
 
             // סעיף 2: שימוש ב-Action גנרי (מקבל Student, אינו מחזיר ערך - void)
-            Action<Student> printDetails = s => Console.WriteLine($"שם: {s.Name}, כיתה: {s.StudentClass}");
+            Action<Student> printDetails = s => Console.WriteLine($"Name: {s.Name}, Class: {s.StudentClass}");
             printDetails(testStudent); // מפעיל את ההדפסה
 
             // סעיף 3: שימוש ב-Predicate גנרי (מקבל תמיד פרמטר אחד ומחזיר תמיד bool)
@@ -88,13 +91,13 @@ namespace Delegate
             // שירשור פעולות (Multicast Delegates) - ניתן לשרשר מספר פונקציות לאותו משתנה Delegate
 
             // סעיף 1: הגדרת פעולת הדפסה ראשונה למשתנה notifier
-            Action<Student> notifier = s => Console.WriteLine($"התחלת תהליך עבור: {s.Name}");
+            Action<Student> notifier = s => Console.WriteLine($"Start processing for: {s.Name}");
 
             // סעיף 2: שרשור פעולה נוספת לאותו המשתנה באמצעות האופרטור +=
-            notifier += s => Console.WriteLine($"הכיתה המשויכת היא: {s.StudentClass}");
+            notifier += s => Console.WriteLine($"In class: {s.StudentClass}");
 
             // סעיף 3: הפעלה בודדת שמריצה את שתי הפונקציות בזו אחר זו לפי סדר הוספתן
-            Console.WriteLine("--- הפעלת שרשור פעולות ---");
+            Console.WriteLine("--- Executing chained actions ---");
             notifier(testStudent);
 
             // חלק ה
@@ -104,25 +107,46 @@ namespace Delegate
             // יצירת רשימת תלמידים מדומיינת לצורך הרצת הפתרונות
             List<Student> students = new List<Student>
         {
-            new Student { Name = "נועה", StudentClass = "יב2" },
-            new Student { Name = "יוסי", StudentClass = "יב2" },
-            new Student { Name = "רוני", StudentClass = "יב3" }
+            new Student { Name = "Noa", StudentClass = "G12-2" },
+            new Student { Name = "Yossi", StudentClass = "G12-2" },
+            new Student { Name = "Roni", StudentClass = "G12-3" }
         };
-
+            // LINQ - Language Integrated Query - מאפשרת לבצע שאילתות על אוספים בצורה נוחה וקריאה
+            
+            
             // סעיף 1: Count - ספירה לפי תנאי (מחזיר int)
             // הלמבדה משמשת כתנאי הבדיקה עבור כל איבר ברשימה
-            int countYV2 = students.Count(s => s.StudentClass == "יב2");
-            Console.WriteLine(countYV2);
+            // Count(...) - עושה שימוש בלמבדה כדי לבדוק כל איבר ברשימה ולהחזיר את מספר האיברים שמקיימים את התנאי
+            // Count() - ללא "תנאי" - מחזיר את מספר האיברים ברשימה 
+            Console.WriteLine(students.Count(s => s.StudentClass == "G12-2"));
 
             // סעיף 2: Find - איתור האיבר הראשון שמקיים את התנאי (מחזיר אובייקט Student או null)
-            Student firstNoa = students.Find(s => s.Name == "נועה");
+
+            // Find(...) - עושה שימוש בלמבדה כדי לבדוק כל איבר ברשימה ולהחזיר את האיבר הראשון שמקיים את התנאי
+            // Find() - ללא "תנאי" - מחזיר את האיבר הראשון ברשימה (או null אם הרשימה ריקה)
+            Student firstNoa = students.Find(s => s.Name == "Noa");
             Console.WriteLine(firstNoa.ToString());
 
+            // אפשר גם ישירות בלי להגדיר משתנה ביניים
+            //Console.WriteLine(students.Find(s => s.Name == "Noa").ToString());
 
             // סעיף 3: Where - סינון ומציאת כל האיברים ועטיפתם ברשימה חדשה (מחזיר אוסף מסונן)
             // אנו מוסיפים .ToList() בסוף כדי להפוך את האוסף המסונן בחזרה לטיפוס של רשימה
-            List<Student> classYV3List = students.Where(s => s.StudentClass == "יב3").ToList();
-            Console.WriteLine(classYV3List.ToString());
+
+            // Where(...) - עושה שימוש בלמבדה כדי לבדוק כל איבר ברשימה ולהחזיר את כל האיברים שמקיימים את התנאי
+            // Where() - ללא "תנאי" - מחזיר את כל האיברים ברשימה
+            List<Student> classYV3List = students.Where(s => s.StudentClass == "G12-3").ToList();
+            foreach (var student in classYV3List)
+            {
+                Console.WriteLine(student.ToString());
+            }
+            //  ניתן בקיצור את הלולאה גם ישירות על הפונקציה Where אפשר גם בלי להגדיר משתנה ביניים
+            //foreach (var student in students.Where(s => s.StudentClass == "G12-3").ToList())
+            //{
+            //    Console.WriteLine(student.ToString());
+            //}
+
+
 
         }
     }

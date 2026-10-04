@@ -51,7 +51,9 @@ namespace Delegate
             DelegateMath doLambda = (a, b) => a + b;
 
 
-
+            // *Func generic* delegate anonymous ret values
+            Func<int, int, int> doLambdaF = (a, b) => a + b;
+            Console.WriteLine($"doLambdaF(1, 2) = {doLambdaF(1, 2)}");
 
             // Use Delegate anonymous with parms no ret values
             PrintMsg printMsg = msg => { Console.WriteLine(msg); };
@@ -60,8 +62,6 @@ namespace Delegate
             // *Action generic*  delegate anonymous no ret values
             Action<string> printMsgA = (string msg) => Console.WriteLine(msg);
             printMsgA("hello");
-
-
 
 
             // Use Delegate anonymous one pram ret value bool

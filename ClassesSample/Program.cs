@@ -85,7 +85,7 @@ namespace ClassesSample
                 //if (!IsValidIsraeliIdFormat(id))
                 if (!IsValidIsraeliId(id))
                     {
-                    Console.WriteLine("Invalid ID. Must be exactly 9 digits.");
+                    Console.WriteLine("Invalid ID. Must be a real ID with exactly 9 digits.");
                     continue;
                 }
 
